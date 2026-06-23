@@ -1,0 +1,17 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .glass {
+    @apply bg-white/10 backdrop-blur-md border border-white/20;
+  }
+
+  .btn-primary {
+    @apply bg-blue-600 text-white px-8 py-3.5 rounded-full font-black transition-all hover:bg-blue-700;
+  }
+
+  .card-elevated {
+    @apply bg-white rounded-3xl shadow-sm border border-gray-100 hover:shadow-lg transition-all;
+  }
+}
