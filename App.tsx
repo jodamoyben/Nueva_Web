@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useMemo } from 'react';
 import { motion } from 'motion/react';
 import {
@@ -16,14 +15,8 @@ import {
   Menu,
   X,
   ChevronRight,
-  ArrowRight,
   FileText,
-  Monitor,
   Layout,
-  PieChart as PieChartIcon,
-  Filter,
-  Calendar,
-  Layers,
   Users,
   DollarSign,
   Activity,
@@ -31,173 +24,170 @@ import {
   Briefcase,
   Check,
   TrendingDown,
-  PieChart as DonutIcon
 } from 'lucide-react';
-import { 
-  CONTACT_EMAIL, 
-  CONTACT_WHATSAPP, 
-  WHATSAPP_URL, 
-  PACKAGES, 
-  ADDITIONAL_SERVICES, 
-  USE_CASES 
+import {
+  AnimatedHero,
+  FloatingNavbar,
+  ScrollRevealSection,
+  FeatureCard,
+  CinematicBackground,
+  CTASection,
+} from './components';
+import {
+  CONTACT_EMAIL,
+  CONTACT_WHATSAPP,
+  WHATSAPP_URL,
+  PACKAGES,
+  ADDITIONAL_SERVICES,
+  USE_CASES,
 } from './constants';
 import { ServicePackage, Language } from './types';
-import { 
-  ResponsiveContainer, 
-  BarChart, 
-  Bar, 
-  XAxis, 
-  YAxis, 
-  Tooltip, 
-  Cell, 
-  AreaChart, 
-  Area, 
-  PieChart, 
+import {
+  ResponsiveContainer,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Tooltip,
+  Cell,
+  AreaChart,
+  Area,
+  PieChart,
   Pie,
   CartesianGrid,
   LineChart,
-  Line
+  Line,
 } from 'recharts';
 
-// New Direct link format for the updated Google Drive image
-const PROFILE_IMAGE_URL = "https://lh3.googleusercontent.com/d/1UHPnzDczfPmnt-SSBYhKR1ds-VlfeWWP";
+// ==================== CONFIG ====================
+const PROFILE_IMAGE_URL = 'https://lh3.googleusercontent.com/d/1UHPnzDczfPmnt-SSBYhKR1ds-VlfeWWP';
 
-// Translations
 const UI_TEXT = {
   es: {
-    navStart: "Inicio",
-    navWhy: "Por qué yo",
-    navPricing: "Paquetes",
-    navUseCases: "Casos de Uso",
-    navDemo: "Demo en Vivo",
-    contactBtn: "Contacto Directo",
-    heroBadge: "IA & Analytics Avanzado",
-    heroTitle: "Dashboards Profesionales Sin Costos de Licencia",
-    heroDesc: "Transformo tus datos crudos en decisiones inteligentes. Ahorra dinero en licencias con soluciones web personalizadas para Banca, Seguros y Contact Centers.",
-    viewFlyer: "Ver Flyer",
-    liveDemo: "Demo en Vivo",
-    whyTitle: "Experiencia en diversos sectores",
-    whyDesc: "Soluciones probadas en Banca, Seguros, Contact Centers y más.",
-    pricingTitle: "Planes de Inversión",
-    pricingSubtitle: "Desde MVPs hasta soluciones empresariales escalables con Inteligencia Artificial.",
-    mostPopular: "MÁS POPULAR",
-    additionalServices: "Servicios Adicionales",
-    customizationDesc: "Personaliza tu dashboard con funcionalidades extra",
-    includesTitle: "Todos los proyectos incluyen:",
-    quote: "Mi objetivo es entregarte una herramienta que use la tecnología a tu favor para crecer.",
-    specialist: "David - Especialista de Datos",
-    expBanca: "Banca, Seguros & Analytics",
-    useCasesTitle: "Casos de Uso Perfectos",
-    useCasesSubtitle: "¿Dónde brillan estas soluciones?",
-    ctaLimited: "CUPOS LIMITADOS DE LANZAMIENTO",
-    ctaTitle: "Asegura un 10% OFF en tu proyecto inicial",
-    ctaSubtitle: "Válido desde el plan Básico en adelante. Usa el código: \"DATAPRO2026\"",
-    ctaEmail: "Contactar por Email",
-    ctaWhatsapp: "Chat WhatsApp",
-    footerDesc: "Soluciones de analítica de alta gama para empresas que buscan escalar sin costos prohibitivos.",
-    location: "Atención remota para todo el mundo. Basado en Lima, Perú.",
-    expFooter: "Experiencia avanzada implementando soluciones para el sector Bancario y Asegurador.",
-    aboutTitle: "Sobre el Especialista",
-    aboutIntro: "Me presento: soy David, desarrollador especializado en crear dashboards gerenciales y aplicaciones web que transforman datos en decisiones.",
-    aboutBody: "He trabajado con empresas del Rubro de Seguros, Banca, Contact Center, y otros, desarrollando sistemas de ventas, análisis de NPS, auditoría de calidad y retención de clientes. Ahora estoy ofreciendo mis servicios de forma independiente con precios mucho más accesibles.",
-    aboutClosing: "¿Tienes datos que necesitas visualizar mejor? Me encantaría conocer tu proyecto y prepararte una propuesta sin compromiso.",
-    aboutDiff: "Lo que me diferencia:",
-    diff1: "Sin costos de licencias mensuales (Power BI/Tableau)",
-    diff2: "Dashboards web que se actualizan automáticamente",
-    diff3: "Diseño personalizado con tu branding",
-    diff4: "Experiencia comprobada con clientes corporativos",
-    demoTitle: "Panel de Control Gerencial",
-    demoBack: "Análisis Real-Time",
-    demoSlicers: "Segmentadores",
-    demoPeriod: "Periodo",
-    demoRegion: "Región",
-    demoUnit: "Unidad de Negocio",
-    demoAll: "Consolidado",
-    demoCTA: "¿Necesitas algo similar para tu empresa?",
-    demoCTAUnder: "Podemos conectar tus bases de datos de SQL, Excel, o APIs en días.",
-    demoRequest: "Agendar Consulta Gratis",
-    salesTrend: "Tendencia de Ingresos",
-    trafficChannels: "Canales de Tráfico",
-    monthlyPerformance: "Métricas de Rendimiento Mensual",
-    salesKpi: "Ingresos Totales",
-    convKpi: "Tasa Conversión",
-    usersKpi: "Usuarios Activos",
-    npsKpi: "NPS Semanal",
-    roiKpi: "ROI Inversión",
-    ahtKpi: "AHT Promedio",
-    churnKpi: "Churn Rate",
-    growthKpi: "Crecimiento"
+    navStart: 'Inicio',
+    navWhy: 'Por qué yo',
+    navPricing: 'Paquetes',
+    navUseCases: 'Casos de Uso',
+    navDemo: 'Demo en Vivo',
+    contactBtn: 'Contacto Directo',
+    heroBadge: 'IA & Analytics Avanzado',
+    heroTitle: 'Dashboards Profesionales Sin Costos de Licencia',
+    heroDesc: 'Transformo tus datos crudos en decisiones inteligentes. Ahorra dinero en licencias con soluciones web personalizadas para Banca, Seguros y Contact Centers.',
+    viewFlyer: 'Ver Flyer',
+    liveDemo: 'Demo en Vivo',
+    whyTitle: 'Experiencia en diversos sectores',
+    whyDesc: 'Soluciones probadas en Banca, Seguros, Contact Centers y más.',
+    pricingTitle: 'Planes de Inversión',
+    pricingSubtitle: 'Desde MVPs hasta soluciones empresariales escalables con Inteligencia Artificial.',
+    mostPopular: 'MÁS POPULAR',
+    additionalServices: 'Servicios Adicionales',
+    customizationDesc: 'Personaliza tu dashboard con funcionalidades extra',
+    includesTitle: 'Todos los proyectos incluyen:',
+    quote: 'Mi objetivo es entregarte una herramienta que use la tecnología a tu favor para crecer.',
+    specialist: 'David - Especialista de Datos',
+    expBanca: 'Banca, Seguros & Analytics',
+    useCasesTitle: 'Casos de Uso Perfectos',
+    useCasesSubtitle: '¿Dónde brillan estas soluciones?',
+    ctaLimited: 'CUPOS LIMITADOS DE LANZAMIENTO',
+    ctaTitle: 'Asegura un 10% OFF en tu proyecto inicial',
+    ctaSubtitle: 'Válido desde el plan Básico en adelante. Usa el código: "DATAPRO2026"',
+    ctaEmail: 'Contactar por Email',
+    ctaWhatsapp: 'Chat WhatsApp',
+    footerDesc: 'Soluciones de analítica de alta gama para empresas que buscan escalar sin costos prohibitivos.',
+    location: 'Atención remota para todo el mundo. Basado en Lima, Perú.',
+    expFooter: 'Experiencia avanzada implementando soluciones para el sector Bancario y Asegurador.',
+    aboutTitle: 'Sobre el Especialista',
+    aboutIntro: 'Me presento: soy David, desarrollador especializado en crear dashboards gerenciales y aplicaciones web que transforman datos en decisiones.',
+    aboutBody: 'He trabajado con empresas del Rubro de Seguros, Banca, Contact Center, y otros, desarrollando sistemas de ventas, análisis de NPS, auditoría de calidad y retención de clientes. Ahora estoy ofreciendo mis servicios de forma independiente con precios mucho más accesibles.',
+    aboutClosing: '¿Tienes datos que necesitas visualizar mejor? Me encantaría conocer tu proyecto y prepararte una propuesta sin compromiso.',
+    aboutDiff: 'Lo que me diferencia:',
+    diff1: 'Sin costos de licencias mensuales (Power BI/Tableau)',
+    diff2: 'Dashboards web que se actualizan automáticamente',
+    diff3: 'Diseño personalizado con tu branding',
+    diff4: 'Experiencia comprobada con clientes corporativos',
+    demoTitle: 'Panel de Control Gerencial',
+    demoBack: 'Análisis Real-Time',
+    demoCTA: '¿Necesitas algo similar para tu empresa?',
+    demoCTAUnder: 'Podemos conectar tus bases de datos de SQL, Excel, o APIs en días.',
+    demoRequest: 'Agendar Consulta Gratis',
+    salesTrend: 'Tendencia de Ingresos',
+    trafficChannels: 'Canales de Tráfico',
+    monthlyPerformance: 'Métricas de Rendimiento Mensual',
+    salesKpi: 'Ingresos Totales',
+    convKpi: 'Tasa Conversión',
+    usersKpi: 'Usuarios Activos',
+    npsKpi: 'NPS Semanal',
+    roiKpi: 'ROI Inversión',
+    churnKpi: 'Churn Rate',
+    growthKpi: 'Crecimiento'
   },
   en: {
-    navStart: "Home",
-    navWhy: "Why me",
-    navPricing: "Packages",
-    navUseCases: "Use Cases",
-    navDemo: "Live Demo",
-    contactBtn: "Direct Contact",
-    heroBadge: "AI & Advanced Analytics",
-    heroTitle: "Professional Dashboards Without License Costs",
-    heroDesc: "I transform your raw data into smart decisions. Save money on licenses with custom web solutions for Banking, Insurance and Contact Centers.",
-    viewFlyer: "View Flyer",
-    liveDemo: "Live Demo",
-    whyTitle: "Sector Expertise",
-    whyDesc: "Proven solutions in Banking, Insurance, Contact Centers and more.",
-    pricingTitle: "Investment Plans",
-    pricingSubtitle: "From MVPs to scalable enterprise solutions with Artificial Intelligence.",
-    mostPopular: "MOST POPULAR",
-    additionalServices: "Additional Services",
-    customizationDesc: "Customize your dashboard with extra features",
-    includesTitle: "All projects include:",
-    quote: "My goal is to provide a tool that uses technology in your favor to grow.",
-    specialist: "David - Data Specialist",
-    expBanca: "Banking, Insurance & Analytics",
-    useCasesTitle: "Perfect Use Cases",
-    useCasesSubtitle: "Where do these solutions shine?",
-    ctaLimited: "LIMITED LAUNCH SLOTS",
-    ctaTitle: "Secure 10% OFF on your initial project",
-    ctaSubtitle: "Valid from the Basic plan upwards. Use code: \"DATAPRO2026\"",
-    ctaEmail: "Contact via Email",
-    ctaWhatsapp: "Chat WhatsApp",
-    footerDesc: "High-end analytics solutions for companies looking to scale without prohibitive costs.",
-    location: "Remote support worldwide. Based in Lima, Peru.",
-    expFooter: "Advanced experience implementing solutions for the Banking and Insurance sectors.",
-    aboutTitle: "About the Specialist",
+    navStart: 'Home',
+    navWhy: 'Why me',
+    navPricing: 'Packages',
+    navUseCases: 'Use Cases',
+    navDemo: 'Live Demo',
+    contactBtn: 'Direct Contact',
+    heroBadge: 'AI & Advanced Analytics',
+    heroTitle: 'Professional Dashboards Without License Costs',
+    heroDesc: 'I transform your raw data into smart decisions. Save money on licenses with custom web solutions for Banking, Insurance and Contact Centers.',
+    viewFlyer: 'View Flyer',
+    liveDemo: 'Live Demo',
+    whyTitle: 'Sector Expertise',
+    whyDesc: 'Proven solutions in Banking, Insurance, Contact Centers and more.',
+    pricingTitle: 'Investment Plans',
+    pricingSubtitle: 'From MVPs to scalable enterprise solutions with Artificial Intelligence.',
+    mostPopular: 'MOST POPULAR',
+    additionalServices: 'Additional Services',
+    customizationDesc: 'Customize your dashboard with extra features',
+    includesTitle: 'All projects include:',
+    quote: 'My goal is to provide a tool that uses technology in your favor to grow.',
+    specialist: 'David - Data Specialist',
+    expBanca: 'Banking, Insurance & Analytics',
+    useCasesTitle: 'Perfect Use Cases',
+    useCasesSubtitle: 'Where do these solutions shine?',
+    ctaLimited: 'LIMITED LAUNCH SLOTS',
+    ctaTitle: 'Secure 10% OFF on your initial project',
+    ctaSubtitle: 'Valid from the Basic plan upwards. Use code: "DATAPRO2026"',
+    ctaEmail: 'Contact via Email',
+    ctaWhatsapp: 'Chat WhatsApp',
+    footerDesc: 'High-end analytics solutions for companies looking to scale without prohibitive costs.',
+    location: 'Remote support worldwide. Based in Lima, Peru.',
+    expFooter: 'Advanced experience implementing solutions for the Banking and Insurance sectors.',
+    aboutTitle: 'About the Specialist',
     aboutIntro: "Hi there, I'm David, a developer specialized in creating managerial dashboards and web applications that transform data into decisions.",
-    aboutBody: "I have worked with companies in the Insurance, Banking, Contact Center sectors, and others, developing sales systems, NPS analysis, quality auditing, and customer retention. Now I am offering my services independently with much more affordable prices.",
-    aboutClosing: "Do you have data that you need to visualize better? I would love to know about your project and prepare a proposal without obligation.",
-    aboutDiff: "What sets me apart:",
-    diff1: "No monthly license costs (Power BI/Tableau)",
-    diff2: "Web dashboards that update automatically",
-    diff3: "Custom design with your branding",
-    diff4: "Proven experience with corporate clients",
-    demoTitle: "Executive Management Dashboard",
-    demoBack: "Real-Time Analysis",
-    demoSlicers: "Slicers & Filters",
-    demoPeriod: "Period",
-    demoRegion: "Region",
-    demoUnit: "Business Unit",
-    demoAll: "Consolidated",
-    demoCTA: "Do you need something similar for your business?",
-    demoCTAUnder: "We can connect your SQL, Excel, or API databases in days.",
-    demoRequest: "Book Free Consultation",
-    salesTrend: "Income Trend",
-    trafficChannels: "Traffic Channels",
-    monthlyPerformance: "Monthly Performance Metrics",
-    salesKpi: "Total Revenue",
-    convKpi: "Conversion Rate",
-    usersKpi: "Active Users",
-    npsKpi: "Weekly NPS",
-    roiKpi: "Investment ROI",
-    ahtKpi: "Average AHT",
-    churnKpi: "Churn Rate",
-    growthKpi: "Growth"
+    aboutBody: 'I have worked with companies in the Insurance, Banking, Contact Center sectors, and others, developing sales systems, NPS analysis, quality auditing, and customer retention. Now I am offering my services independently with much more affordable prices.',
+    aboutClosing: 'Do you have data that you need to visualize better? I would love to know about your project and prepare a proposal without obligation.',
+    aboutDiff: 'What sets me apart:',
+    diff1: 'No monthly license costs (Power BI/Tableau)',
+    diff2: 'Web dashboards that update automatically',
+    diff3: 'Custom design with your branding',
+    diff4: 'Proven experience with corporate clients',
+    demoTitle: 'Executive Management Dashboard',
+    demoBack: 'Real-Time Analysis',
+    demoCTA: 'Do you need something similar for your business?',
+    demoCTAUnder: 'We can connect your SQL, Excel, or API databases in days.',
+    demoRequest: 'Book Free Consultation',
+    salesTrend: 'Income Trend',
+    trafficChannels: 'Traffic Channels',
+    monthlyPerformance: 'Monthly Performance Metrics',
+    salesKpi: 'Total Revenue',
+    convKpi: 'Conversion Rate',
+    usersKpi: 'Active Users',
+    npsKpi: 'Weekly NPS',
+    roiKpi: 'Investment ROI',
+    churnKpi: 'Churn Rate',
+    growthKpi: 'Growth'
   }
 };
 
-const PackageCard: React.FC<{ pkg: ServicePackage, lang: Language }> = ({ pkg, lang }) => {
+// ==================== PACKAGE CARD ====================
+const PackageCard: React.FC<{ pkg: ServicePackage; lang: Language }> = ({
+  pkg,
+  lang,
+}) => {
   const isHighlight = pkg.highlight;
   const isGreen = pkg.color === 'green';
-  const borderColor = isHighlight ? 'border-blue-500 ring-4 ring-blue-500 ring-opacity-10' : 'border-gray-100';
   const circleColor = isGreen ? 'text-green-500' : 'text-blue-500';
 
   return (
@@ -207,18 +197,23 @@ const PackageCard: React.FC<{ pkg: ServicePackage, lang: Language }> = ({ pkg, l
       whileHover={{ y: -8 }}
       transition={{ duration: 0.5, type: 'spring', stiffness: 100 }}
       viewport={{ once: true }}
-      className={`relative flex flex-col p-8 bg-white rounded-3xl transition-all duration-300 hover:shadow-2xl border-2 ${borderColor} ${isHighlight ? 'scale-105 z-10' : ''}`}
+      className={`relative flex flex-col p-8 bg-white rounded-2xl transition-all border-2 ${
+        isHighlight
+          ? 'border-blue-500 ring-4 ring-blue-500 ring-opacity-10 scale-105 z-10 shadow-2xl'
+          : 'border-gray-100 shadow-sm hover:shadow-lg'
+      }`}
     >
       {isHighlight && (
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.2, type: 'spring' }}
+          transition={{ delay: 0.2 }}
           className="absolute -top-4 left-1/2 -translate-x-1/2 bg-blue-600 text-white px-5 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest shadow-lg"
         >
           {UI_TEXT[lang].mostPopular}
         </motion.div>
       )}
+
       <div className="text-center mb-8">
         <h3 className="text-lg font-black text-gray-800 mb-4">{pkg.name[lang]}</h3>
         <div className="flex items-center justify-center gap-1">
@@ -250,17 +245,14 @@ const PackageCard: React.FC<{ pkg: ServicePackage, lang: Language }> = ({ pkg, l
           <Clock className="w-3.5 h-3.5" />
           <span>{pkg.delivery[lang]}</span>
         </div>
-        <div className="text-[10px] text-gray-300 uppercase tracking-[0.2em] font-black">
-          {pkg.designTime[lang]}
-        </div>
       </div>
     </motion.div>
   );
 };
 
-const DashboardDemo = ({ onClose, lang }: { onClose: () => void, lang: Language }) => {
+// ==================== DASHBOARD DEMO ====================
+const DashboardDemo = ({ onClose, lang }: { onClose: () => void; lang: Language }) => {
   const t = UI_TEXT[lang];
-  const [activeTab, setActiveTab] = useState<'period' | 'region' | 'unit'>('period');
 
   const incomeTrendData = useMemo(() => [
     { name: 'Ene', value: 24100, target: 20000 },
@@ -311,8 +303,7 @@ const DashboardDemo = ({ onClose, lang }: { onClose: () => void, lang: Language 
         transition={{ type: 'spring', stiffness: 300, damping: 30 }}
         className="bg-[#f8fafc] w-full max-w-7xl h-full max-h-[90vh] rounded-[32px] shadow-3xl overflow-hidden flex flex-col border border-white/10"
       >
-
-        {/* Modal Header */}
+        {/* Header */}
         <motion.div
           initial={{ y: -20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
@@ -327,7 +318,7 @@ const DashboardDemo = ({ onClose, lang }: { onClose: () => void, lang: Language 
               <BarChart3 className="w-6 h-6" />
             </motion.div>
             <div>
-              <h3 className="font-black text-gray-900 leading-tight text-lg">{t.demoTitle}</h3>
+              <h3 className="font-black text-gray-900 text-lg">{t.demoTitle}</h3>
               <p className="text-[9px] font-black text-blue-600 uppercase tracking-widest">{t.demoBack}</p>
             </div>
           </div>
@@ -335,16 +326,15 @@ const DashboardDemo = ({ onClose, lang }: { onClose: () => void, lang: Language 
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.95 }}
             onClick={onClose}
-            className="p-2 hover:bg-gray-200 rounded-full transition-colors"
+            className="p-2 hover:bg-gray-200 rounded-full"
           >
             <X className="w-6 h-6 text-gray-400" />
           </motion.button>
         </motion.div>
 
-        {/* Dashboard Content */}
+        {/* Content */}
         <div className="flex-grow p-6 md:p-8 overflow-y-auto space-y-6 bg-gradient-to-b from-[#f1f5f9]/50 to-white">
-
-          {/* KPI Cards */}
+          {/* KPIs */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {kpiData.map((kpi, idx) => {
               const colorMap: Record<string, { bg: string; text: string }> = {
@@ -356,32 +346,32 @@ const DashboardDemo = ({ onClose, lang }: { onClose: () => void, lang: Language 
               const colors = colorMap[kpi.color] || { bg: '#f3f4f6', text: '#6b7280' };
 
               return (
-              <motion.div
-                key={idx}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: idx * 0.1 }}
-                whileHover={{ y: -4 }}
-                className={`bg-white p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-lg transition-all`}
-              >
-                <div className="flex items-start justify-between mb-4">
-                  <div className="p-3 rounded-xl" style={{ backgroundColor: colors.bg, color: colors.text }}>
-                    <kpi.icon className="w-5 h-5" />
+                <motion.div
+                  key={idx}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: idx * 0.1 }}
+                  whileHover={{ y: -4 }}
+                  className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-lg transition-all"
+                >
+                  <div className="flex items-start justify-between mb-4">
+                    <div className="p-3 rounded-xl" style={{ backgroundColor: colors.bg, color: colors.text }}>
+                      <kpi.icon className="w-5 h-5" />
+                    </div>
+                    <span className="text-xs font-black px-2 py-1 rounded-full" style={{ backgroundColor: colors.bg, color: colors.text }}>
+                      {kpi.change}
+                    </span>
                   </div>
-                  <span className="text-xs font-black px-2 py-1 rounded-full" style={{ backgroundColor: colors.bg, color: colors.text }}>
-                    {kpi.change}
-                  </span>
-                </div>
-                <p className="text-xs font-bold text-gray-500 mb-1">{kpi.label}</p>
-                <p className="text-2xl font-black text-gray-900">{kpi.value}</p>
-              </motion.div>
+                  <p className="text-xs font-bold text-gray-500 mb-1">{kpi.label}</p>
+                  <p className="text-2xl font-black text-gray-900">{kpi.value}</p>
+                </motion.div>
               );
             })}
           </div>
 
+          {/* Charts */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-
-            {/* Income Trend (Line Chart) */}
+            {/* Area Chart */}
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
@@ -390,26 +380,26 @@ const DashboardDemo = ({ onClose, lang }: { onClose: () => void, lang: Language 
             >
               <h4 className="font-black text-gray-900 mb-2">{t.salesTrend}</h4>
               <p className="text-xs font-bold text-gray-400 mb-6">Últimos 8 meses</p>
-              <div className="flex-grow h-64">
+              <div className="h-64">
                 <ResponsiveContainer width="100%" height="100%">
                   <AreaChart data={incomeTrendData}>
                     <defs>
                       <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3}/>
-                        <stop offset="95%" stopColor="#3b82f6" stopOpacity={0}/>
+                        <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3} />
+                        <stop offset="95%" stopColor="#3b82f6" stopOpacity={0} />
                       </linearGradient>
                     </defs>
                     <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
-                    <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#94a3b8', fontWeight: 600 }} dy={10} />
-                    <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#94a3b8', fontWeight: 600 }} dx={-10} />
+                    <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#94a3b8' }} />
+                    <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#94a3b8' }} />
                     <Tooltip contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }} />
-                    <Area type="monotone" dataKey="value" stroke="#3b82f6" strokeWidth={3} fillOpacity={1} fill="url(#colorValue)" dot={{ r: 4, fill: '#3b82f6', strokeWidth: 2, stroke: '#fff' }} />
+                    <Area type="monotone" dataKey="value" stroke="#3b82f6" strokeWidth={3} fillOpacity={1} fill="url(#colorValue)" />
                   </AreaChart>
                 </ResponsiveContainer>
               </div>
             </motion.div>
 
-            {/* Traffic Channels (Donut Chart) */}
+            {/* Pie Chart */}
             <motion.div
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
@@ -417,31 +407,27 @@ const DashboardDemo = ({ onClose, lang }: { onClose: () => void, lang: Language 
               className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm hover:shadow-lg transition-all"
             >
               <h4 className="font-black text-gray-900 mb-2">{t.trafficChannels}</h4>
-              <p className="text-xs font-bold text-gray-400 mb-6">Distribución de tráfico</p>
-              <div className="flex-grow flex items-center justify-center">
-                <div className="relative w-full h-48">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <PieChart>
-                      <Pie data={trafficData} cx="50%" cy="50%" innerRadius={55} outerRadius={80} paddingAngle={6} dataKey="value" stroke="none">
-                        {trafficData.map((entry, index) => <Cell key={`cell-${index}`} fill={entry.color} />)}
-                      </Pie>
-                    </PieChart>
-                  </ResponsiveContainer>
-                </div>
+              <p className="text-xs font-bold text-gray-400 mb-6">Distribución</p>
+              <div className="h-64 flex items-center justify-center">
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie data={trafficData} cx="50%" cy="50%" innerRadius={55} outerRadius={80} paddingAngle={6} dataKey="value" stroke="none">
+                      {trafficData.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={entry.color} />
+                      ))}
+                    </Pie>
+                  </PieChart>
+                </ResponsiveContainer>
               </div>
               <motion.div className="mt-6 space-y-3">
                 {trafficData.map((item, i) => (
                   <motion.div
                     key={i}
                     whileHover={{ x: 4 }}
-                    className="flex justify-between items-center text-xs font-bold text-gray-500 hover:text-gray-900 transition-colors"
+                    className="flex justify-between items-center text-xs font-bold text-gray-500"
                   >
                     <div className="flex items-center gap-2">
-                      <motion.div
-                        className="w-2.5 h-2.5 rounded-full"
-                        style={{ backgroundColor: item.color }}
-                        whileHover={{ scale: 1.5 }}
-                      ></motion.div>
+                      <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: item.color }} />
                       {item.name}
                     </div>
                     <span className="text-gray-900 font-black">{item.value}%</span>
@@ -451,7 +437,7 @@ const DashboardDemo = ({ onClose, lang }: { onClose: () => void, lang: Language 
             </motion.div>
           </div>
 
-          {/* Monthly Performance (Bar Chart) */}
+          {/* Bar Chart */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -459,45 +445,44 @@ const DashboardDemo = ({ onClose, lang }: { onClose: () => void, lang: Language 
             className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm hover:shadow-lg transition-all"
           >
             <h4 className="font-black text-gray-900 mb-2">{t.monthlyPerformance}</h4>
-            <p className="text-xs font-bold text-gray-400 mb-6">Análisis comparativo mensual</p>
-            <div className="h-72 w-full">
+            <p className="text-xs font-bold text-gray-400 mb-6">Análisis comparativo</p>
+            <div className="h-72">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={performanceData}>
                   <defs>
                     <linearGradient id="colorSales" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor="#6366f1" stopOpacity={1}/>
-                      <stop offset="100%" stopColor="#6366f1" stopOpacity={0.6}/>
+                      <stop offset="0%" stopColor="#6366f1" stopOpacity={1} />
+                      <stop offset="100%" stopColor="#6366f1" stopOpacity={0.6} />
                     </linearGradient>
                   </defs>
                   <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
-                  <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#94a3b8', fontWeight: 600 }} dy={10} />
-                  <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#94a3b8', fontWeight: 600 }} dx={-10} />
-                  <Tooltip cursor={{ fill: '#f8fafc' }} contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }} />
-                  <Bar dataKey="sales" fill="url(#colorSales)" radius={[8, 8, 0, 0]} barSize={45} />
+                  <XAxis dataKey="name" axisLine={false} tickLine={false} />
+                  <YAxis axisLine={false} tickLine={false} />
+                  <Tooltip contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 6px' }} />
+                  <Bar dataKey="sales" fill="url(#colorSales)" radius={[8, 8, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             </div>
           </motion.div>
-
         </div>
 
-        {/* CTA Bar with Motion */}
+        {/* CTA */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5 }}
-          className="mx-8 mb-8 p-6 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-[24px] flex flex-col md:flex-row justify-between items-center gap-6 border border-blue-200 shadow-lg hover:shadow-xl transition-all"
+          className="mx-8 mb-8 p-6 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl flex flex-col md:flex-row justify-between items-center gap-6 border border-blue-200 shadow-lg"
         >
           <div className="flex items-center gap-4">
             <motion.div
               animate={{ y: [0, -4, 0] }}
               transition={{ repeat: Infinity, duration: 2 }}
-              className="w-12 h-12 rounded-full bg-blue-600 flex items-center justify-center text-white shadow-lg shadow-blue-500/30"
+              className="w-12 h-12 rounded-full bg-blue-600 flex items-center justify-center text-white shadow-lg"
             >
               <TrendingUp className="w-6 h-6" />
             </motion.div>
             <div>
-              <p className="text-sm font-black text-blue-900 leading-tight">{t.demoCTA}</p>
+              <p className="text-sm font-black text-blue-900">{t.demoCTA}</p>
               <p className="text-xs font-bold text-blue-600/80">{t.demoCTAUnder}</p>
             </div>
           </div>
@@ -506,7 +491,7 @@ const DashboardDemo = ({ onClose, lang }: { onClose: () => void, lang: Language 
             target="_blank"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="w-full md:w-auto bg-blue-600 text-white px-8 py-3.5 rounded-2xl font-black text-sm hover:bg-blue-700 transition-all shadow-xl shadow-blue-500/30 text-center whitespace-nowrap"
+            className="w-full md:w-auto bg-blue-600 text-white px-8 py-3.5 rounded-2xl font-black text-sm hover:bg-blue-700 transition-all shadow-xl"
           >
             {t.demoRequest}
           </motion.a>
@@ -516,10 +501,13 @@ const DashboardDemo = ({ onClose, lang }: { onClose: () => void, lang: Language 
   );
 };
 
+// ==================== MAIN APP ====================
 export default function App() {
   const [lang, setLang] = useState<Language>('es');
   const [showDemo, setShowDemo] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+
+  const t = UI_TEXT[lang];
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -527,278 +515,43 @@ export default function App() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const t = UI_TEXT[lang];
-
   return (
-    <motion.div className="min-h-screen bg-[#fcfcfc] selection:bg-blue-100 selection:text-blue-900">
+    <motion.div className="min-h-screen bg-white selection:bg-blue-100 selection:text-blue-900">
+      {/* Navbar */}
+      <FloatingNavbar
+        scrolled={scrolled}
+        navItems={[
+          { label: t.navStart, href: '#start' },
+          { label: t.navWhy, href: '#why' },
+          { label: t.navPricing, href: '#pricing' },
+          { label: t.navUseCases, href: '#usecases' },
+        ]}
+        onLanguageChange={(lang) => setLang(lang as Language)}
+        currentLang={lang}
+        contactCTA={{ label: t.contactBtn, href: WHATSAPP_URL }}
+      />
 
-      {/* Navigation */}
-      <motion.nav
-        initial={{ opacity: 0, y: -10 }}
-        animate={{ opacity: 1, y: 0 }}
-        className={`fixed top-0 w-full z-[80] transition-all duration-500 ${scrolled ? 'bg-white/95 backdrop-blur-md shadow-2xl py-5' : 'bg-transparent py-8'}`}
-      >
-        <div className="max-w-7xl mx-auto px-8 flex justify-between items-center">
-          <div className="flex items-center gap-3">
-            <div className={`p-3 rounded-2xl shadow-2xl transition-all duration-500 ${scrolled ? 'bg-blue-600 text-white' : 'bg-white/10 text-white backdrop-blur-md'}`}>
-              <BarChart3 className="w-7 h-7" />
-            </div>
-            <span className={`font-black tracking-tighter transition-colors text-xl ${scrolled ? 'text-gray-900' : 'text-white'}`}>DataPro 2026</span>
-          </div>
-
-          <div className="hidden lg:flex items-center gap-10">
-            <div className={`flex gap-1 p-1 rounded-full border transition-all ${scrolled ? 'bg-gray-100 border-gray-200' : 'bg-white/10 border-white/20 backdrop-blur-md'}`}>
-              <button 
-                onClick={() => setLang('es')} 
-                className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase transition-all ${lang === 'es' ? (scrolled ? 'bg-blue-600 text-white shadow-lg' : 'bg-white text-blue-700 shadow-xl') : (scrolled ? 'text-gray-500 hover:text-gray-800' : 'text-white/60 hover:text-white')}`}
-              >
-                ES
-              </button>
-              <button 
-                onClick={() => setLang('en')} 
-                className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase transition-all ${lang === 'en' ? (scrolled ? 'bg-blue-600 text-white shadow-lg' : 'bg-white text-blue-700 shadow-xl') : (scrolled ? 'text-gray-500 hover:text-gray-800' : 'text-white/60 hover:text-white')}`}
-              >
-                EN
-              </button>
-            </div>
-
-            {['Start', 'Why', 'Pricing', 'UseCases'].map((key) => {
-              const label = t[`nav${key}` as keyof typeof t];
-              const href = `#${key.toLowerCase()}`;
-              return (
-                <a key={key} href={href} className={`text-sm font-black tracking-tight transition-all hover:text-blue-500 ${scrolled ? 'text-gray-700' : 'text-blue-100'}`}>
-                  {label}
-                </a>
-              );
-            })}
-          </div>
-
-          <div className="flex items-center gap-6">
-            <a href={WHATSAPP_URL} target="_blank" className={`hidden sm:flex px-8 py-3.5 rounded-[20px] text-sm font-black transition-all items-center gap-3 shadow-2xl ${scrolled ? 'bg-blue-600 text-white hover:bg-blue-700 shadow-blue-500/20' : 'bg-white text-blue-700 hover:bg-blue-50'}`}>
-              <MessageSquare className="w-4 h-4" /> {t.contactBtn}
-            </a>
-            
-            <button className={`lg:hidden p-2 rounded-xl ${scrolled ? 'text-gray-900' : 'text-white'}`}>
-               <Menu className="w-7 h-7" />
-            </button>
-          </div>
-        </div>
-      </motion.nav>
-
-      {/* Hero Section */}
-      <header id="start" className="relative pt-32 pb-16 md:pt-40 md:pb-24 overflow-hidden bg-gradient-to-br from-gray-950 via-indigo-950 to-gray-950 text-white">
-        <div className="absolute inset-0 opacity-20 pointer-events-none">
-          <motion.div
-            animate={{ scale: [1, 1.1, 1] }}
-            transition={{ repeat: Infinity, duration: 4 }}
-            className="absolute top-0 right-0 w-[1000px] h-[1000px] bg-blue-600/30 rounded-full blur-[200px] -mr-96 -mt-96"
-          ></motion.div>
-        </div>
-
-        <div className="max-w-7xl mx-auto px-8 relative z-10 text-center lg:text-left">
-          <div className="grid lg:grid-cols-2 gap-24 items-center">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-            >
-              <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.1, duration: 0.5 }}
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-blue-500/10 border border-blue-400/20 text-blue-400 text-[10px] font-black uppercase tracking-[0.25em] mb-12"
-              >
-                <Brain className="w-4 h-4" />
-                <span>{t.heroBadge}</span>
-              </motion.div>
-              <motion.h1
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2, duration: 0.6 }}
-                className="text-4xl md:text-6xl lg:text-7xl font-black tracking-tighter leading-[0.9] mb-8"
-              >
-                {t.heroTitle.split(' ').slice(0, -3).join(' ')} <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-500">{t.heroTitle.split(' ').slice(-3).join(' ')}</span>
-              </motion.h1>
-              <motion.p
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3, duration: 0.6 }}
-                className="text-lg md:text-xl text-gray-400 mb-10 max-w-2xl mx-auto lg:mx-0 leading-relaxed font-bold tracking-tight"
-              >
-                {t.heroDesc}
-              </motion.p>
-
-
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4, duration: 0.6 }}
-                className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start"
-              >
-                <motion.a
-                  href="#pricing"
-                  whileHover={{ scale: 1.05, y: -2 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="bg-blue-600 text-white px-8 py-3.5 rounded-full font-black text-base hover:bg-blue-700 transition-all flex items-center gap-3 shadow-xl group"
-                >
-                  <motion.div whileHover={{ scale: 1.2 }} className="w-5 h-5">
-                    <FileText className="w-5 h-5" />
-                  </motion.div>
-                  {t.viewFlyer}
-                </motion.a>
-                <motion.button
-                  onClick={() => setShowDemo(true)}
-                  whileHover={{ scale: 1.05, y: -2 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="bg-white/10 text-white border border-white/10 px-8 py-3.5 rounded-full font-black text-base hover:bg-white/20 transition-all flex items-center gap-3 backdrop-blur-xl"
-                >
-                  <motion.div whileHover={{ scale: 1.2 }} className="w-5 h-5">
-                    <Layout className="w-5 h-5" />
-                  </motion.div>
-                  {t.liveDemo}
-                </motion.button>
-              </motion.div>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, x: 50 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.5, duration: 0.6 }}
-              className="hidden lg:block relative group"
-            >
-              <motion.div
-                animate={{ scale: [1, 1.05, 1] }}
-                transition={{ repeat: Infinity, duration: 3 }}
-                className="absolute -inset-10 bg-blue-600/10 rounded-[60px] blur-3xl group-hover:bg-blue-600/20 transition-all duration-700"
-              ></motion.div>
-              <motion.div
-                whileHover={{ scale: 1.02, y: -5 }}
-                transition={{ type: 'spring', stiffness: 300 }}
-                className="bg-gray-900/50 backdrop-blur-3xl border border-white/10 p-12 rounded-[60px] shadow-3xl relative overflow-hidden"
-              >
-                <div className="flex items-center justify-between mb-12">
-                  <div className="flex gap-4">
-                    <div className="w-4 h-4 rounded-full bg-red-500/70 shadow-lg"></div>
-                    <div className="w-4 h-4 rounded-full bg-yellow-500/70 shadow-lg"></div>
-                    <div className="w-4 h-4 rounded-full bg-green-500/70 shadow-lg"></div>
-                  </div>
-                  <div className="text-[10px] font-black text-blue-400/50 uppercase tracking-[0.4em] font-mono">datapro_premium_v4.ts</div>
-                </div>
-                
-                <div className="grid grid-cols-3 gap-6">
-                  <div className="col-span-3 h-64 bg-white/5 rounded-[40px] border border-white/5 p-10 flex items-end">
-                    <div className="w-full flex items-end gap-4 h-full">
-                       {[20, 45, 30, 85, 55, 95, 40, 75, 60, 90].map((h, i) => (
-                         <div key={i} className="flex-grow bg-gradient-to-t from-blue-700 to-blue-400 rounded-xl transition-all duration-500 hover:scale-110" style={{ height: `${h}%` }}></div>
-                       ))}
-                    </div>
-                  </div>
-                  <div className="bg-white/5 p-8 rounded-[40px] border border-white/5 flex flex-col items-center">
-                    <TrendingUp className="w-6 h-6 text-emerald-400 mb-3" />
-                    <p className="text-3xl font-black mb-1">+45%</p>
-                    <p className="text-[8px] font-black text-gray-500 uppercase tracking-widest">Growth</p>
-                  </div>
-                  <div className="bg-white/5 p-8 rounded-[40px] border border-white/5 flex flex-col items-center">
-                    <Activity className="w-6 h-6 text-blue-400 mb-3" />
-                    <p className="text-3xl font-black mb-1">2.1s</p>
-                    <p className="text-[8px] font-black text-gray-500 uppercase tracking-widest">Speed</p>
-                  </div>
-                  <div className="bg-white/5 p-8 rounded-[40px] border border-white/5 flex flex-col items-center">
-                    <CheckCircle2 className="w-6 h-6 text-purple-400 mb-3" />
-                    <p className="text-3xl font-black mb-1">100%</p>
-                    <p className="text-[8px] font-black text-gray-500 uppercase tracking-widest">Safe</p>
-                  </div>
-                </div>
-              </motion.div>
-            </motion.div>
-          </div>
-        </div>
-      </header>
-
-      {/* About Section - THE NEW PERSONAL INTRO SECTION */}
-      <section className="py-20 bg-white relative overflow-hidden">
-        <div className="max-w-7xl mx-auto px-6 md:px-8">
-           <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-start">
-              <div className="space-y-10 flex flex-col">
-                 <div className="relative group">
-                    <div className="absolute -inset-1.5 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-[50px] blur opacity-10 group-hover:opacity-30 transition-all duration-500"></div>
-                    <div className="relative bg-gray-50 rounded-[50px] overflow-hidden aspect-[4/5] shadow-2xl flex items-center justify-center">
-                        <img src={PROFILE_IMAGE_URL} className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" alt="David Specialist" />
-                        <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-gray-900/90 via-gray-900/40 p-12 pt-24 text-white">
-                            <p className="text-4xl font-black tracking-tighter mb-2">{t.specialist}</p>
-                            <p className="text-sm font-black text-blue-400 uppercase tracking-[0.3em]">{t.expBanca}</p>
-                        </div>
-                    </div>
-                 </div>
-
-                 {/* New relocate Quote Box under the image */}
-                 <div className="bg-gray-950 p-8 rounded-[40px] shadow-2xl relative overflow-hidden group">
-                    <div className="absolute -top-6 -left-6 bg-blue-600 p-6 rounded-[28px] shadow-2xl group-hover:scale-110 transition-transform duration-500">
-                        <MessageSquare className="w-8 h-8 text-white" />
-                    </div>
-                    <blockquote className="text-2xl font-black italic text-white/90 mb-10 leading-tight tracking-tight mt-6">
-                        "{t.quote}"
-                    </blockquote>
-                    <div className="flex items-center gap-5">
-                        <div className="w-16 h-16 rounded-[24px] bg-gradient-to-br from-blue-500 to-indigo-600 p-0.5 shadow-xl overflow-hidden">
-                            <img src={PROFILE_IMAGE_URL} className="w-full h-full object-cover rounded-[22px]" alt="Profile Mini" />
-                        </div>
-                        <div>
-                            <p className="font-black text-lg text-white tracking-tighter leading-tight">{t.specialist}</p>
-                            <p className="text-[9px] font-black text-blue-400 uppercase tracking-[0.3em]">{t.expBanca}</p>
-                        </div>
-                    </div>
-                 </div>
-              </div>
-
-              <div className="pt-4 lg:pt-10">
-                 <div className="inline-flex items-center gap-3 px-6 py-2 bg-blue-50 text-blue-600 rounded-full text-xs font-black uppercase tracking-widest mb-10 shadow-sm border border-blue-100">
-                    <Briefcase className="w-4 h-4" /> {t.aboutTitle}
-                 </div>
-                 <h2 className="text-4xl md:text-5xl font-black text-gray-900 mb-6 leading-[1.1] tracking-tighter">
-                    {t.aboutIntro}
-                 </h2>
-                 <p className="text-lg text-gray-600 font-bold mb-8 leading-relaxed tracking-tight">
-                    {t.aboutBody}
-                 </p>
-                 
-                 <div className="space-y-6 mb-12">
-                    <h4 className="text-[10px] font-black text-blue-600 uppercase tracking-[0.4em] mb-4">{t.aboutDiff}</h4>
-                    <div className="grid sm:grid-cols-2 gap-6">
-                       {[t.diff1, t.diff2, t.diff3, t.diff4].map((diff, i) => (
-                         <div key={i} className="flex items-center gap-4 group">
-                            <div className="bg-emerald-50 p-2 rounded-xl text-emerald-600 group-hover:bg-emerald-600 group-hover:text-white transition-all duration-300 shadow-sm border border-emerald-100">
-                               <Check className="w-4 h-4" />
-                            </div>
-                            <span className="text-sm font-black text-gray-700 tracking-tight">{diff}</span>
-                         </div>
-                       ))}
-                    </div>
-                 </div>
-
-                 <div className="bg-[#f8fafc] p-10 rounded-[40px] shadow-sm relative border border-gray-100 flex flex-col items-center text-center">
-                    <p className="text-xl font-black text-gray-800 leading-snug mb-8 italic">
-                       "{t.aboutClosing}"
-                    </p>
-                    <a href={WHATSAPP_URL} target="_blank" className="inline-flex items-center gap-4 bg-blue-600 text-white px-10 py-5 rounded-3xl font-black text-lg hover:bg-blue-700 transition-all shadow-xl shadow-blue-500/20 group">
-                       <MessageSquare className="w-6 h-6" /> {t.demoRequest} <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                    </a>
-                 </div>
-              </div>
-           </div>
-        </div>
+      {/* Hero - Cinemático */}
+      <section id="start">
+        <AnimatedHero
+          badge={t.heroBadge}
+          title={t.heroTitle}
+          subtitle={t.heroDesc}
+          primaryCTA={{
+            label: t.viewFlyer,
+            onClick: () => {
+              document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' });
+            },
+          }}
+          secondaryCTA={{
+            label: t.liveDemo,
+            href: '#demo',
+          }}
+        />
       </section>
 
       {/* Trust Sectors */}
-      <motion.section
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        transition={{ duration: 0.6 }}
-        viewport={{ once: true }}
-        id="why"
-        className="py-20 bg-gray-50 border-b border-gray-100"
-      >
+      <ScrollRevealSection id="why" className="py-20 bg-gray-50 border-b border-gray-100">
         <div className="max-w-7xl mx-auto px-6 md:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -807,15 +560,16 @@ export default function App() {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <h2 className="text-3xl md:text-4xl font-black text-gray-900 mb-4">{t.whyTitle}</h2>
-            <p className="text-gray-500 font-bold text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">{t.whyDesc}</p>
+            <h2 className="text-4xl md:text-5xl font-black text-gray-900 mb-4">{t.whyTitle}</h2>
+            <p className="text-gray-500 font-bold text-lg max-w-2xl mx-auto">{t.whyDesc}</p>
           </motion.div>
+
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {[
-              { label: lang === 'es' ? 'Banca y Finanzas' : 'Banking & Finance', icon: Shield, color: 'blue', bgLight: '#eff6ff', bgDark: '#1e40af', text: '#2563eb' },
-              { label: lang === 'es' ? 'Sector Seguros' : 'Insurance Sector', icon: Zap, color: 'emerald', bgLight: '#f0fdf4', bgDark: '#059669', text: '#10b981' },
-              { label: 'Contact Centers', icon: Globe, color: 'purple', bgLight: '#faf5ff', bgDark: '#7c3aed', text: '#a855f7' },
-              { label: 'Retail & E-comm', icon: Brain, color: 'indigo', bgLight: '#eef2ff', bgDark: '#4f46e5', text: '#6366f1' }
+              { label: lang === 'es' ? 'Banca y Finanzas' : 'Banking & Finance', icon: Shield, color: 'blue', bgLight: '#eff6ff', text: '#2563eb' },
+              { label: lang === 'es' ? 'Sector Seguros' : 'Insurance Sector', icon: Zap, color: 'emerald', bgLight: '#f0fdf4', text: '#10b981' },
+              { label: 'Contact Centers', icon: Globe, color: 'purple', bgLight: '#faf5ff', text: '#a855f7' },
+              { label: 'Retail & E-comm', icon: Brain, color: 'indigo', bgLight: '#eef2ff', text: '#6366f1' }
             ].map((sector, i) => (
               <motion.div
                 key={i}
@@ -830,7 +584,6 @@ export default function App() {
                   whileHover={{ rotate: 8 }}
                   className="w-20 h-20 md:w-24 md:h-24 rounded-[30px] flex items-center justify-center mx-auto mb-6 shadow-sm transition-all duration-500 group-hover:text-white"
                   style={{ backgroundColor: sector.bgLight, color: sector.text }}
-                  onHoverStart={() => {}}
                 >
                   <sector.icon className="w-10 h-10" />
                 </motion.div>
@@ -839,17 +592,10 @@ export default function App() {
             ))}
           </div>
         </div>
-      </motion.section>
+      </ScrollRevealSection>
 
       {/* Pricing */}
-      <motion.section
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        transition={{ duration: 0.6 }}
-        viewport={{ once: true }}
-        id="pricing"
-        className="py-20 bg-white"
-      >
+      <ScrollRevealSection id="pricing" className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-6 md:px-8">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -858,17 +604,15 @@ export default function App() {
             viewport={{ once: true }}
             className="text-center max-w-4xl mx-auto mb-16"
           >
-            <h2 className="text-4xl md:text-5xl font-black text-gray-900 mb-6 tracking-tighter">{t.pricingTitle}</h2>
-            <p className="text-lg md:text-xl text-gray-500 font-bold tracking-tight">{t.pricingSubtitle}</p>
+            <h2 className="text-4xl md:text-5xl font-black text-gray-900 mb-6">{t.pricingTitle}</h2>
+            <p className="text-lg md:text-xl text-gray-500 font-bold">{t.pricingSubtitle}</p>
           </motion.div>
 
           <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
-            variants={{
-              visible: { transition: { staggerChildren: 0.1 } },
-            }}
+            variants={{ visible: { transition: { staggerChildren: 0.1 } } }}
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 items-stretch mb-20"
           >
             {PACKAGES.map((pkg) => (
@@ -876,6 +620,7 @@ export default function App() {
             ))}
           </motion.div>
 
+          {/* Additional Services */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -893,25 +638,25 @@ export default function App() {
             </div>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {ADDITIONAL_SERVICES.map((service, i) => (
-                <div key={i} className="flex justify-between items-center p-6 bg-white rounded-[24px] hover:shadow-lg hover:border-blue-100 transition-all border border-transparent group">
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 10 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.05 }}
+                  whileHover={{ scale: 1.02 }}
+                  className="flex justify-between items-center p-6 bg-white rounded-2xl hover:shadow-lg hover:border-blue-100 transition-all border border-transparent group"
+                >
                   <span className="font-bold text-sm text-gray-800 group-hover:text-blue-700">{service.name[lang]}</span>
-                  <span className="font-black text-sm text-blue-600 bg-gray-50 px-4 py-2 rounded-xl border border-gray-100 shadow-sm whitespace-nowrap ml-2">{service.price}</span>
-                </div>
+                  <span className="font-black text-sm text-blue-600 bg-gray-100 px-4 py-2 rounded-xl border border-gray-200 whitespace-nowrap ml-2">{service.price}</span>
+                </motion.div>
               ))}
             </div>
           </motion.div>
         </div>
-      </motion.section>
+      </ScrollRevealSection>
 
       {/* Use Cases */}
-      <motion.section
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        transition={{ duration: 0.6 }}
-        viewport={{ once: true }}
-        id="usecases"
-        className="py-20 bg-white"
-      >
+      <ScrollRevealSection id="usecases" className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-6 md:px-8">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -920,17 +665,15 @@ export default function App() {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <h2 className="text-4xl md:text-5xl font-black text-gray-900 mb-6 tracking-tighter">{t.useCasesTitle}</h2>
-            <p className="text-lg md:text-xl text-gray-500 font-bold tracking-tight">{t.useCasesSubtitle}</p>
+            <h2 className="text-4xl md:text-5xl font-black text-gray-900 mb-6">{t.useCasesTitle}</h2>
+            <p className="text-lg md:text-xl text-gray-500 font-bold">{t.useCasesSubtitle}</p>
           </motion.div>
 
           <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
-            variants={{
-              visible: { transition: { staggerChildren: 0.1 } },
-            }}
+            variants={{ visible: { transition: { staggerChildren: 0.1 } } }}
             className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
           >
             {USE_CASES.map((useCase, i) => (
@@ -943,113 +686,37 @@ export default function App() {
                 whileHover={{ y: -8 }}
                 className="p-10 rounded-[40px] border border-gray-100 hover:shadow-2xl transition-all group bg-gray-50/50 flex flex-col items-center text-center"
               >
-                <div className={`w-20 h-20 rounded-[28px] mb-8 flex items-center justify-center transition-all group-hover:scale-110 group-hover:rotate-6
-                  ${useCase.color === 'blue' ? 'bg-blue-100 text-blue-600 shadow-blue-100' : 
-                    useCase.color === 'indigo' ? 'bg-indigo-100 text-indigo-600 shadow-indigo-100' :
-                    useCase.color === 'purple' ? 'bg-purple-100 text-purple-600 shadow-purple-100' :
-                    useCase.color === 'pink' ? 'bg-pink-100 text-pink-600 shadow-pink-100' :
-                    useCase.color === 'green' ? 'bg-green-100 text-green-600 shadow-green-100' :
-                    'bg-yellow-100 text-yellow-600 shadow-yellow-100'
-                  } shadow-2xl`}
+                <div className={`w-20 h-20 rounded-[28px] mb-8 flex items-center justify-center transition-all group-hover:scale-110 group-hover:rotate-6 shadow-2xl`}
+                  style={{
+                    backgroundColor: useCase.color === 'blue' ? '#dbeafe' :
+                      useCase.color === 'indigo' ? '#e0e7ff' :
+                      useCase.color === 'purple' ? '#f3e8ff' :
+                      useCase.color === 'pink' ? '#fce7f3' :
+                      useCase.color === 'green' ? '#dcfce7' : '#fef3c7',
+                    color: useCase.color === 'blue' ? '#2563eb' :
+                      useCase.color === 'indigo' ? '#4f46e5' :
+                      useCase.color === 'purple' ? '#9333ea' :
+                      useCase.color === 'pink' ? '#ec4899' :
+                      useCase.color === 'green' ? '#22c55e' : '#eab308'
+                  }}
                 >
                   <Globe className="w-8 h-8" />
                 </div>
-                <h3 className="text-2xl font-black text-gray-900 mb-4 group-hover:text-blue-600 transition-colors tracking-tight">{useCase.title[lang]}</h3>
-                <p className="text-gray-500 font-bold text-base leading-relaxed tracking-tight">{useCase.description[lang]}</p>
+                <h3 className="text-2xl font-black text-gray-900 mb-4 group-hover:text-blue-600 transition-colors">{useCase.title[lang]}</h3>
+                <p className="text-gray-500 font-bold text-base leading-relaxed">{useCase.description[lang]}</p>
               </motion.div>
             ))}
           </motion.div>
         </div>
-      </motion.section>
+      </ScrollRevealSection>
 
-      {/* CTA Section */}
-      <motion.section
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        transition={{ duration: 0.6 }}
-        viewport={{ once: true }}
-        className="py-20 px-6 md:px-8 bg-white"
-      >
-        <div className="max-w-7xl mx-auto bg-emerald-600 rounded-[40px] p-12 md:p-20 text-center text-white shadow-2xl shadow-emerald-900/20 relative overflow-hidden">
-          <motion.div
-            animate={{ scale: [1, 1.05, 1] }}
-            transition={{ repeat: Infinity, duration: 3 }}
-            className="absolute inset-0 opacity-10 pointer-events-none"
-          >
-            <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-white rounded-full blur-[100px] -ml-48 -mt-48"></div>
-            <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-white rounded-full blur-[100px] -mr-48 -mb-48"></div>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-            className="relative z-10"
-          >
-            <motion.span
-              initial={{ opacity: 0, scale: 0.8 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.1, duration: 0.5 }}
-              viewport={{ once: true }}
-              className="inline-block bg-white/20 backdrop-blur-xl border border-white/30 text-white px-10 py-3 rounded-full text-[12px] font-black uppercase tracking-[0.4em] mb-14 shadow-lg"
-            >
-              {t.ctaLimited}
-            </motion.span>
-            <motion.h2
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2, duration: 0.6 }}
-              viewport={{ once: true }}
-              className="text-4xl md:text-6xl font-black mb-8 leading-[1] tracking-tighter"
-            >
-              {t.ctaTitle}
-            </motion.h2>
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3, duration: 0.6 }}
-              viewport={{ once: true }}
-              className="text-xl md:text-2xl text-emerald-50 mb-12 font-bold max-w-4xl mx-auto leading-relaxed tracking-tight"
-            >
-              {t.ctaSubtitle}
-            </motion.p>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4, duration: 0.6 }}
-              viewport={{ once: true }}
-              className="flex flex-col sm:flex-row gap-6 justify-center"
-            >
-              <motion.a
-                href={`mailto:${CONTACT_EMAIL}`}
-                whileHover={{ scale: 1.05, y: -4 }}
-                whileTap={{ scale: 0.95 }}
-                className="flex items-center justify-center gap-4 bg-white text-emerald-700 px-10 py-5 rounded-[28px] font-black text-xl hover:bg-emerald-50 transition-all shadow-2xl group"
-              >
-                <Mail className="w-6 h-6" /> {t.ctaEmail}
-                <motion.div animate={{ x: [0, 4, 0] }} transition={{ repeat: Infinity, duration: 1.5 }}>
-                  <ChevronRight className="w-6 h-6" />
-                </motion.div>
-              </motion.a>
-              <motion.a
-                href={WHATSAPP_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                whileHover={{ scale: 1.05, y: -4 }}
-                whileTap={{ scale: 0.95 }}
-                className="flex items-center justify-center gap-4 bg-emerald-800/50 backdrop-blur-xl border border-white/10 text-white px-10 py-5 rounded-[28px] font-black text-xl hover:bg-emerald-800 transition-all shadow-2xl group"
-              >
-                <MessageSquare className="w-6 h-6" /> {t.ctaWhatsapp}
-                <motion.div animate={{ x: [0, 4, 0] }} transition={{ repeat: Infinity, duration: 1.5 }}>
-                  <ChevronRight className="w-6 h-6" />
-                </motion.div>
-              </motion.a>
-            </motion.div>
-          </motion.div>
-        </div>
-      </motion.section>
+      {/* CTA Final */}
+      <CTASection
+        title={t.ctaTitle}
+        subtitle={t.ctaSubtitle}
+        primaryCTA={{ label: t.ctaEmail, href: `mailto:${CONTACT_EMAIL}` }}
+        secondaryCTA={{ label: t.ctaWhatsapp, href: WHATSAPP_URL }}
+      />
 
       {/* Footer */}
       <footer className="bg-gray-950 text-gray-500 py-20">
@@ -1057,54 +724,43 @@ export default function App() {
           <div className="grid md:grid-cols-3 gap-16 mb-16 border-b border-white/5 pb-16">
             <div>
               <div className="flex items-center gap-4 mb-8">
-                <div className="bg-blue-600 p-2.5 rounded-2xl shadow-xl shadow-blue-500/30">
-                   <BarChart3 className="w-6 h-6 text-white" />
+                <div className="bg-blue-600 p-2.5 rounded-2xl shadow-xl">
+                  <BarChart3 className="w-6 h-6 text-white" />
                 </div>
                 <span className="font-black text-3xl text-white tracking-tighter">DataPro</span>
               </div>
-              <p className="text-lg font-bold leading-relaxed mb-10 text-gray-400 tracking-tight">
-                {t.footerDesc}
-              </p>
-              <div className="flex gap-8">
-                <Globe className="w-8 h-8 hover:text-white transition-colors cursor-pointer" />
-                <Smartphone className="w-8 h-8 hover:text-white transition-colors cursor-pointer" />
-                <Shield className="w-8 h-8 hover:text-white transition-colors cursor-pointer" />
-              </div>
+              <p className="text-lg font-bold leading-relaxed mb-10 text-gray-400">{t.footerDesc}</p>
             </div>
-            
+
             <div>
-              <h4 className="text-white font-black mb-8 uppercase tracking-[0.4em] text-[10px]">{lang === 'es' ? 'Contacto Directo' : 'Direct Contact'}</h4>
-              <ul className="space-y-6 text-base font-black tracking-tight">
+              <h4 className="text-white font-black mb-8 uppercase text-[10px] tracking-widest">Contacto Directo</h4>
+              <ul className="space-y-6 text-base font-black">
                 <li className="flex items-center gap-4 group">
-                  <div className="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center group-hover:bg-blue-600 group-hover:shadow-xl group-hover:shadow-blue-500/30 transition-all duration-500">
-                     <Mail className="w-5 h-5 text-blue-500 group-hover:text-white" />
+                  <div className="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center group-hover:bg-blue-600 transition-all">
+                    <Mail className="w-5 h-5 text-blue-500 group-hover:text-white" />
                   </div>
                   <a href={`mailto:${CONTACT_EMAIL}`} className="hover:text-white transition-colors">{CONTACT_EMAIL}</a>
                 </li>
                 <li className="flex items-center gap-4 group">
-                   <div className="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center group-hover:bg-emerald-600 group-hover:shadow-xl group-hover:shadow-emerald-500/30 transition-all duration-500">
-                     <MessageSquare className="w-5 h-5 text-emerald-500 group-hover:text-white" />
+                  <div className="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center group-hover:bg-emerald-600 transition-all">
+                    <MessageSquare className="w-5 h-5 text-emerald-500 group-hover:text-white" />
                   </div>
-                  <a href={WHATSAPP_URL} target="_blank" className="hover:text-white transition-colors">{CONTACT_WHATSAPP}</a>
+                  <a href={WHATSAPP_URL} target="_blank" className="hover:text-white transition-colors">WhatsApp</a>
                 </li>
               </ul>
             </div>
-            
+
             <div>
-              <h4 className="text-white font-black mb-8 uppercase tracking-[0.4em] text-[10px]">{lang === 'es' ? 'Cobertura' : 'Coverage'}</h4>
-              <p className="text-lg font-black text-gray-400 leading-relaxed tracking-tight">
-                {t.location}
-              </p>
-              <div className="mt-8 p-8 bg-white/5 rounded-3xl border border-white/10 shadow-2xl">
-                <p className="text-sm font-black text-gray-200 tracking-tight leading-relaxed">
-                  {t.expFooter}
-                </p>
+              <h4 className="text-white font-black mb-8 uppercase text-[10px] tracking-widest">Cobertura</h4>
+              <p className="text-lg font-black text-gray-400 leading-relaxed mb-8">{t.location}</p>
+              <div className="p-8 bg-white/5 rounded-3xl border border-white/10">
+                <p className="text-sm font-black text-gray-200 leading-relaxed">{t.expFooter}</p>
               </div>
             </div>
           </div>
-          
-          <div className="flex flex-col md:flex-row justify-between items-center gap-10 text-[12px] font-black uppercase tracking-[0.3em]">
-            <p>© 2026 Dashboard Online. Professional Data Intelligence Solutions.</p>
+
+          <div className="flex flex-col md:flex-row justify-between items-center gap-10 text-[12px] font-black uppercase">
+            <p>© 2026 Dashboard Online. Professional Data Intelligence.</p>
             <div className="flex gap-12">
               <a href="#" className="hover:text-white transition-colors">{lang === 'es' ? 'Términos' : 'Terms'}</a>
               <a href="#" className="hover:text-white transition-colors">{lang === 'es' ? 'Privacidad' : 'Privacy'}</a>
@@ -1113,6 +769,7 @@ export default function App() {
         </div>
       </footer>
 
+      {/* Demo Modal */}
       {showDemo && <DashboardDemo onClose={() => setShowDemo(false)} lang={lang} />}
     </motion.div>
   );
