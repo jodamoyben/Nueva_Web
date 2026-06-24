@@ -310,23 +310,36 @@ export const CTASection: React.FC<{
       whileInView={{ opacity: 1 }}
       transition={{ duration: 0.8 }}
       viewport={{ once: true }}
-      className="relative py-20 md:py-32 px-6 md:px-8 overflow-hidden"
+      className="relative py-20 md:py-32 px-6 md:px-8 overflow-hidden bg-gradient-to-b from-blue-50 via-indigo-50 to-purple-50"
     >
-      <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 via-purple-600/10 to-blue-600/20" />
+      {/* Enhanced background */}
+      <div className="absolute inset-0">
+        <motion.div
+          animate={{ scale: [1, 1.1, 1], opacity: [0.3, 0.5, 0.3] }}
+          transition={{ duration: 6, repeat: Infinity }}
+          className="absolute -top-40 -right-40 w-96 h-96 bg-blue-400/20 rounded-full blur-3xl"
+        />
+        <motion.div
+          animate={{ scale: [1.1, 1, 1.1], opacity: [0.2, 0.4, 0.2] }}
+          transition={{ duration: 8, repeat: Infinity, delay: 1 }}
+          className="absolute -bottom-40 -left-40 w-96 h-96 bg-indigo-400/20 rounded-full blur-3xl"
+        />
+      </div>
 
+      {/* Decorative border box */}
       <motion.div
-        animate={{ scale: [1, 1.05, 1] }}
-        transition={{ duration: 4, repeat: Infinity }}
-        className="absolute -top-40 -right-40 w-80 h-80 bg-blue-600/30 rounded-full blur-3xl"
-      />
-
-      <div className="relative max-w-4xl mx-auto text-center z-10">
+        initial={{ opacity: 0, scale: 0.95 }}
+        whileInView={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.6 }}
+        viewport={{ once: true }}
+        className="relative max-w-5xl mx-auto z-10 border-4 border-red-500 rounded-[40px] p-12 md:p-20 bg-white/40 backdrop-blur-xl shadow-2xl"
+      >
         <motion.h2
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
-          className="text-4xl md:text-5xl lg:text-6xl font-black text-white mb-6"
+          className="text-4xl md:text-6xl lg:text-7xl font-black text-white mb-6 drop-shadow-lg text-center"
         >
           {title}
         </motion.h2>
@@ -336,7 +349,7 @@ export const CTASection: React.FC<{
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2, duration: 0.8 }}
           viewport={{ once: true }}
-          className="text-lg md:text-xl text-gray-300 mb-10 leading-relaxed"
+          className="text-lg md:text-xl text-gray-100 mb-12 leading-relaxed text-center drop-shadow"
         >
           {subtitle}
         </motion.p>
@@ -346,29 +359,29 @@ export const CTASection: React.FC<{
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4, duration: 0.8 }}
           viewport={{ once: true }}
-          className="flex flex-col sm:flex-row gap-4 justify-center"
+          className="flex flex-col sm:flex-row gap-6 justify-center"
         >
           <motion.a
             href={primaryCTA.href}
-            whileHover={{ scale: 1.05, y: -2 }}
+            whileHover={{ scale: 1.08, y: -4 }}
             whileTap={{ scale: 0.95 }}
-            className="px-8 py-4 bg-blue-600 text-white rounded-full font-black text-base hover:bg-blue-700 transition-colors shadow-2xl shadow-blue-500/50 flex items-center gap-2 justify-center"
+            className="px-10 py-4 bg-blue-600 text-white rounded-full font-black text-base hover:bg-blue-700 transition-all shadow-2xl shadow-blue-500/50 flex items-center gap-2 justify-center"
           >
-            {primaryCTA.label}
+            ✉️ {primaryCTA.label}
             <ChevronRight className="w-5 h-5" />
           </motion.a>
 
           <motion.a
             href={secondaryCTA.href}
-            whileHover={{ scale: 1.05, y: -2 }}
+            whileHover={{ scale: 1.08, y: -4 }}
             whileTap={{ scale: 0.95 }}
-            className="px-8 py-4 bg-white/10 text-white rounded-full font-black text-base border border-white/20 hover:bg-white/20 transition-colors backdrop-blur-sm flex items-center gap-2 justify-center"
+            className="px-10 py-4 bg-white/90 text-blue-600 rounded-full font-black text-base hover:bg-white transition-all shadow-2xl flex items-center gap-2 justify-center"
           >
-            {secondaryCTA.label}
+            💬 {secondaryCTA.label}
             <ChevronRight className="w-5 h-5" />
           </motion.a>
         </motion.div>
-      </div>
+      </motion.div>
     </motion.div>
   );
 };

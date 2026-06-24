@@ -1,7 +1,9 @@
 import React, { useRef, useState } from 'react';
 import { motion } from 'motion/react';
-import { cn } from 'clsx';
+import clsx from 'clsx';
 import { Check, Star, ChevronRight } from 'lucide-react';
+
+const cn = (...classes: any[]) => clsx(...classes);
 
 // ==================== LAMP COMPONENT ====================
 export const LampContainer = ({

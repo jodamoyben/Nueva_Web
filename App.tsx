@@ -219,10 +219,10 @@ const PackageCard: React.FC<{ pkg: ServicePackage; lang: Language }> = ({
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.2 }}
-          className="absolute -top-4 left-1/2 -translate-x-1/2 bg-yellow-400 text-yellow-900 px-5 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest shadow-lg flex items-center gap-2"
+          className="absolute -top-4 left-1/2 -translate-x-1/2 bg-gradient-to-r from-amber-400 to-yellow-300 text-amber-900 px-6 py-2 rounded-full text-[11px] font-black uppercase tracking-widest shadow-xl flex items-center gap-2 border-2 border-white"
         >
-          <Star className="w-3 h-3 fill-current" />
-          {UI_TEXT[lang].mostPopular}
+          <Star className="w-3.5 h-3.5 fill-current" />
+          {lang === 'es' ? '⭐ MÁS RECOMENDADO' : '⭐ MOST RECOMMENDED'}
         </motion.div>
       )}
 
@@ -290,6 +290,8 @@ const PackageCard: React.FC<{ pkg: ServicePackage; lang: Language }> = ({
 // ==================== DASHBOARD DEMO ====================
 const DashboardDemo = ({ onClose, lang }: { onClose: () => void; lang: Language }) => {
   const t = UI_TEXT[lang];
+  const [selectedPeriod, setSelectedPeriod] = useState('month');
+  const [selectedSegment, setSelectedSegment] = useState('all');
 
   const incomeTrendData = useMemo(() => [
     { name: 'Ene', value: 24100, target: 20000 },
@@ -367,6 +369,68 @@ const DashboardDemo = ({ onClose, lang }: { onClose: () => void; lang: Language 
           >
             <X className="w-6 h-6 text-gray-400" />
           </motion.button>
+        </motion.div>
+
+        {/* Segmentadores */}
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.05 }}
+          className="px-8 py-4 bg-white border-b border-gray-100 flex flex-col md:flex-row gap-6 md:gap-12 items-start md:items-center"
+        >
+          <div className="flex-1">
+            <p className="text-xs font-black text-gray-500 uppercase tracking-widest mb-2">
+              {lang === 'es' ? '⏱️ Período' : '⏱️ Period'}
+            </p>
+            <div className="flex gap-2">
+              {[
+                { id: 'week', label: lang === 'es' ? 'Última semana' : 'Last week' },
+                { id: 'month', label: lang === 'es' ? 'Este mes' : 'This month' },
+                { id: 'year', label: lang === 'es' ? 'Este año' : 'This year' },
+              ].map((option) => (
+                <motion.button
+                  key={option.id}
+                  onClick={() => setSelectedPeriod(option.id)}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className={`px-4 py-2 rounded-lg text-xs font-black transition-all ${
+                    selectedPeriod === option.id
+                      ? 'bg-blue-600 text-white shadow-lg'
+                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                  }`}
+                >
+                  {option.label}
+                </motion.button>
+              ))}
+            </div>
+          </div>
+
+          <div className="flex-1">
+            <p className="text-xs font-black text-gray-500 uppercase tracking-widest mb-2">
+              {lang === 'es' ? '📊 Segmento' : '📊 Segment'}
+            </p>
+            <div className="flex gap-2">
+              {[
+                { id: 'all', label: lang === 'es' ? 'Todos' : 'All' },
+                { id: 'premium', label: 'Premium' },
+                { id: 'enterprise', label: 'Enterprise' },
+              ].map((option) => (
+                <motion.button
+                  key={option.id}
+                  onClick={() => setSelectedSegment(option.id)}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className={`px-4 py-2 rounded-lg text-xs font-black transition-all ${
+                    selectedSegment === option.id
+                      ? 'bg-emerald-600 text-white shadow-lg'
+                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                  }`}
+                >
+                  {option.label}
+                </motion.button>
+              ))}
+            </div>
+          </div>
         </motion.div>
 
         {/* Content */}
@@ -709,11 +773,6 @@ export default function App() {
           </div>
         </div>
       </ScrollRevealSection>
-
-      {/* Lamp Section - Premium Visual */}
-      <section className="w-full bg-gradient-to-b from-slate-900 to-slate-950 py-20">
-        <LampDemo />
-      </section>
 
       {/* Trust Sectors */}
       <ScrollRevealSection id="why" className="py-20 bg-gray-50 border-b border-gray-100">
