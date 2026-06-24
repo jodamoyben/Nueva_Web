@@ -24,6 +24,7 @@ import {
   Briefcase,
   Check,
   TrendingDown,
+  Star,
 } from 'lucide-react';
 import {
   AnimatedHero,
@@ -33,6 +34,7 @@ import {
   CinematicBackground,
   CTASection,
 } from './components';
+import { LampDemo, PricingCardPremium } from './components-premium';
 import {
   CONTACT_EMAIL,
   CONTACT_WHATSAPP,
@@ -188,41 +190,57 @@ const PackageCard: React.FC<{ pkg: ServicePackage; lang: Language }> = ({
 }) => {
   const isHighlight = pkg.highlight;
   const isGreen = pkg.color === 'green';
-  const circleColor = isGreen ? 'text-green-500' : 'text-blue-500';
+  const circleColor = isGreen ? 'text-emerald-500' : 'text-blue-500';
 
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
-      whileHover={{ y: -8 }}
+      whileHover={{ y: -12, boxShadow: '0 25px 50px -12px rgba(37, 99, 235, 0.3)' }}
       transition={{ duration: 0.5, type: 'spring', stiffness: 100 }}
       viewport={{ once: true }}
-      className={`relative flex flex-col p-8 bg-white rounded-2xl transition-all border-2 ${
+      className={`relative flex flex-col p-8 md:p-10 rounded-3xl transition-all border-2 overflow-hidden group ${
         isHighlight
-          ? 'border-blue-500 ring-4 ring-blue-500 ring-opacity-10 scale-105 z-10 shadow-2xl'
-          : 'border-gray-100 shadow-sm hover:shadow-lg'
+          ? 'bg-gradient-to-br from-blue-600 to-blue-700 border-blue-400 shadow-2xl shadow-blue-500/40 scale-105 z-10'
+          : 'bg-white border-gray-200 shadow-lg hover:shadow-xl'
       }`}
     >
+      {/* Animated background for highlight */}
+      {isHighlight && (
+        <motion.div
+          animate={{ opacity: [0.5, 0.8, 0.5] }}
+          transition={{ duration: 4, repeat: Infinity }}
+          className="absolute -top-40 -right-40 w-80 h-80 bg-white/10 rounded-full blur-3xl pointer-events-none"
+        />
+      )}
+
       {isHighlight && (
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.2 }}
-          className="absolute -top-4 left-1/2 -translate-x-1/2 bg-blue-600 text-white px-5 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest shadow-lg"
+          className="absolute -top-4 left-1/2 -translate-x-1/2 bg-yellow-400 text-yellow-900 px-5 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest shadow-lg flex items-center gap-2"
         >
+          <Star className="w-3 h-3 fill-current" />
           {UI_TEXT[lang].mostPopular}
         </motion.div>
       )}
 
-      <div className="text-center mb-8">
-        <h3 className="text-lg font-black text-gray-800 mb-4">{pkg.name[lang]}</h3>
+      <div className="relative z-10 text-center mb-8">
+        <h3 className={`text-xl font-black mb-4 ${isHighlight ? 'text-white' : 'text-gray-900'}`}>
+          {pkg.name[lang]}
+        </h3>
         <div className="flex items-center justify-center gap-1">
-          <span className="text-4xl font-black text-gray-900">${pkg.price}</span>
-          <span className="text-xs font-bold text-gray-400 uppercase tracking-widest self-end pb-1.5">USD</span>
+          <span className={`text-5xl font-black ${isHighlight ? 'text-white' : 'text-gray-900'}`}>
+            ${pkg.price}
+          </span>
+          <span className={`text-xs font-bold uppercase tracking-widest self-end pb-2 ${isHighlight ? 'text-blue-100' : 'text-gray-400'}`}>
+            USD
+          </span>
         </div>
       </div>
 
-      <div className="flex-grow space-y-4 mb-10">
+      <div className="relative z-10 flex-grow space-y-3.5 mb-10">
         {pkg.features[lang].map((feature: string, idx: number) => (
           <motion.div
             key={idx}
@@ -230,18 +248,37 @@ const PackageCard: React.FC<{ pkg: ServicePackage; lang: Language }> = ({
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ delay: idx * 0.05, duration: 0.3 }}
             viewport={{ once: true }}
-            className="flex items-start gap-3 text-sm text-gray-600 leading-tight"
+            className={`flex items-start gap-3 text-sm leading-tight ${
+              isHighlight ? 'text-blue-50' : 'text-gray-600'
+            }`}
           >
-            <div className={`mt-0.5 rounded-full p-0.5 border border-gray-100 ${circleColor}`}>
-              <CheckCircle2 className="w-3.5 h-3.5" />
+            <div className={`mt-1 flex-shrink-0 ${
+              isHighlight
+                ? 'w-4 h-4 rounded-full bg-blue-300/30 flex items-center justify-center'
+                : 'w-4 h-4 rounded-full bg-emerald-50 flex items-center justify-center'
+            }`}>
+              <Check className={`w-3 h-3 ${isHighlight ? 'text-blue-100' : 'text-emerald-600'}`} />
             </div>
-            <span>{feature}</span>
+            <span className="font-bold">{feature}</span>
           </motion.div>
         ))}
       </div>
 
-      <div className="mt-auto pt-8 border-t border-gray-50 text-center">
-        <div className="flex items-center justify-center gap-2 text-xs font-bold text-gray-400 mb-1">
+      <motion.button
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+        className={`relative z-10 w-full py-3.5 rounded-2xl font-black text-base transition-all flex items-center justify-center gap-2 ${
+          isHighlight
+            ? 'bg-white text-blue-600 hover:bg-blue-50 shadow-lg'
+            : 'bg-blue-600 text-white hover:bg-blue-700'
+        }`}
+      >
+        {lang === 'es' ? 'Contratar' : 'Get Started'}
+        <ChevronRight className="w-5 h-5" />
+      </motion.button>
+
+      <div className="relative z-10 mt-6 pt-6 border-t border-opacity-20 border-current text-center">
+        <div className={`flex items-center justify-center gap-2 text-xs font-bold ${isHighlight ? 'text-blue-100' : 'text-gray-400'}`}>
           <Clock className="w-3.5 h-3.5" />
           <span>{pkg.delivery[lang]}</span>
         </div>
@@ -548,6 +585,134 @@ export default function App() {
             href: '#demo',
           }}
         />
+      </section>
+
+      {/* About Section - PERFIL ESPECIALISTA */}
+      <ScrollRevealSection className="py-20 bg-white relative overflow-hidden">
+        <div className="max-w-7xl mx-auto px-6 md:px-8">
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-start">
+            {/* Foto + Quote */}
+            <div className="space-y-10 flex flex-col">
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.6 }}
+                viewport={{ once: true }}
+                className="relative group"
+              >
+                <div className="absolute -inset-1.5 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-[50px] blur opacity-10 group-hover:opacity-30 transition-all duration-500"></div>
+                <div className="relative bg-gray-50 rounded-[50px] overflow-hidden aspect-[4/5] shadow-2xl flex items-center justify-center">
+                  <img
+                    src={PROFILE_IMAGE_URL}
+                    className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
+                    alt="David Specialist"
+                  />
+                  <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-gray-900/90 via-gray-900/40 p-12 pt-24 text-white">
+                    <p className="text-4xl font-black tracking-tighter mb-2">{t.specialist}</p>
+                    <p className="text-sm font-black text-blue-400 uppercase tracking-[0.3em]">{t.expBanca}</p>
+                  </div>
+                </div>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2, duration: 0.6 }}
+                viewport={{ once: true }}
+                className="bg-gray-950 p-8 rounded-[40px] shadow-2xl relative overflow-hidden group"
+              >
+                <div className="absolute -top-6 -left-6 bg-blue-600 p-6 rounded-[28px] shadow-2xl group-hover:scale-110 transition-transform duration-500">
+                  <MessageSquare className="w-8 h-8 text-white" />
+                </div>
+                <blockquote className="text-2xl font-black italic text-white/90 mb-10 leading-tight tracking-tight mt-6">
+                  "{t.quote}"
+                </blockquote>
+                <div className="flex items-center gap-5">
+                  <div className="w-16 h-16 rounded-[24px] bg-gradient-to-br from-blue-500 to-indigo-600 p-0.5 shadow-xl overflow-hidden">
+                    <img
+                      src={PROFILE_IMAGE_URL}
+                      className="w-full h-full object-cover rounded-[22px]"
+                      alt="Profile Mini"
+                    />
+                  </div>
+                  <div>
+                    <p className="font-black text-lg text-white tracking-tighter leading-tight">{t.specialist}</p>
+                    <p className="text-[9px] font-black text-blue-400 uppercase tracking-[0.3em]">{t.expBanca}</p>
+                  </div>
+                </div>
+              </motion.div>
+            </div>
+
+            {/* Texto + Diferencias */}
+            <motion.div
+              initial={{ opacity: 0, x: 30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6 }}
+              viewport={{ once: true }}
+              className="pt-4 lg:pt-10"
+            >
+              <div className="inline-flex items-center gap-3 px-6 py-2 bg-blue-50 text-blue-600 rounded-full text-xs font-black uppercase tracking-widest mb-10 shadow-sm border border-blue-100">
+                <Briefcase className="w-4 h-4" /> {t.aboutTitle}
+              </div>
+              <h2 className="text-4xl md:text-5xl font-black text-gray-900 mb-6 leading-[1.1] tracking-tighter">
+                {t.aboutIntro}
+              </h2>
+              <p className="text-lg text-gray-600 font-bold mb-8 leading-relaxed tracking-tight">
+                {t.aboutBody}
+              </p>
+
+              <div className="space-y-6 mb-12">
+                <h4 className="text-[10px] font-black text-blue-600 uppercase tracking-[0.4em] mb-4">
+                  {t.aboutDiff}
+                </h4>
+                <div className="grid sm:grid-cols-2 gap-6">
+                  {[t.diff1, t.diff2, t.diff3, t.diff4].map((diff, i) => (
+                    <motion.div
+                      key={i}
+                      initial={{ opacity: 0, x: -10 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.1 + i * 0.05 }}
+                      viewport={{ once: true }}
+                      className="flex items-center gap-4 group"
+                    >
+                      <div className="bg-emerald-50 p-2 rounded-xl text-emerald-600 group-hover:bg-emerald-600 group-hover:text-white transition-all duration-300 shadow-sm border border-emerald-100">
+                        <Check className="w-4 h-4" />
+                      </div>
+                      <span className="text-sm font-black text-gray-700 tracking-tight">{diff}</span>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3, duration: 0.6 }}
+                viewport={{ once: true }}
+                className="bg-[#f8fafc] p-10 rounded-[40px] shadow-sm relative border border-gray-100 flex flex-col items-center text-center"
+              >
+                <p className="text-xl font-black text-gray-800 leading-snug mb-8 italic">
+                  "{t.aboutClosing}"
+                </p>
+                <motion.a
+                  href={WHATSAPP_URL}
+                  target="_blank"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="inline-flex items-center gap-4 bg-blue-600 text-white px-10 py-5 rounded-3xl font-black text-lg hover:bg-blue-700 transition-all shadow-xl shadow-blue-500/20 group"
+                >
+                  <MessageSquare className="w-6 h-6" /> {t.demoRequest}
+                  <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                </motion.a>
+              </motion.div>
+            </motion.div>
+          </div>
+        </div>
+      </ScrollRevealSection>
+
+      {/* Lamp Section - Premium Visual */}
+      <section className="w-full bg-gradient-to-b from-slate-900 to-slate-950 py-20">
+        <LampDemo />
       </section>
 
       {/* Trust Sectors */}
