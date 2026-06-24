@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { motion } from 'motion/react';
+import { motion, AnimatePresence } from 'motion/react';
 import {
   BarChart3,
   Zap,
@@ -33,8 +33,8 @@ import {
   FeatureCard,
   CinematicBackground,
   CTASection,
+  WhatsAppIcon,
 } from './components';
-import { LampDemo, PricingCardPremium } from './components-premium';
 import {
   CONTACT_EMAIL,
   CONTACT_WHATSAPP,
@@ -199,19 +199,21 @@ const PackageCard: React.FC<{ pkg: ServicePackage; lang: Language }> = ({
       whileHover={{ y: -12, boxShadow: '0 25px 50px -12px rgba(37, 99, 235, 0.3)' }}
       transition={{ duration: 0.5, type: 'spring', stiffness: 100 }}
       viewport={{ once: true }}
-      className={`relative flex flex-col p-8 md:p-10 rounded-3xl transition-all border-2 overflow-hidden group ${
+      className={`relative flex flex-col p-8 md:p-10 rounded-3xl transition-all border-2 group ${
         isHighlight
-          ? 'bg-gradient-to-br from-blue-600 to-blue-700 border-blue-400 shadow-2xl shadow-blue-500/40 scale-105 z-10'
+          ? 'bg-gradient-to-br from-blue-600 to-blue-700 border-blue-400 shadow-2xl shadow-blue-500/40 scale-105 z-10 mt-6'
           : 'bg-white border-gray-200 shadow-lg hover:shadow-xl'
       }`}
     >
-      {/* Animated background for highlight */}
+      {/* Animated background for highlight (contained) */}
       {isHighlight && (
-        <motion.div
-          animate={{ opacity: [0.5, 0.8, 0.5] }}
-          transition={{ duration: 4, repeat: Infinity }}
-          className="absolute -top-40 -right-40 w-80 h-80 bg-white/10 rounded-full blur-3xl pointer-events-none"
-        />
+        <div className="absolute inset-0 overflow-hidden rounded-3xl pointer-events-none">
+          <motion.div
+            animate={{ opacity: [0.5, 0.8, 0.5] }}
+            transition={{ duration: 4, repeat: Infinity }}
+            className="absolute -top-40 -right-40 w-80 h-80 bg-white/10 rounded-full blur-3xl"
+          />
+        </div>
       )}
 
       {isHighlight && (
@@ -219,10 +221,10 @@ const PackageCard: React.FC<{ pkg: ServicePackage; lang: Language }> = ({
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.2 }}
-          className="absolute -top-4 left-1/2 -translate-x-1/2 bg-gradient-to-r from-amber-400 to-yellow-300 text-amber-900 px-6 py-2 rounded-full text-[11px] font-black uppercase tracking-widest shadow-xl flex items-center gap-2 border-2 border-white"
+          className="absolute -top-3.5 left-1/2 -translate-x-1/2 z-20 bg-gradient-to-r from-amber-400 to-yellow-300 text-amber-900 px-5 py-1.5 rounded-full text-[10px] font-black uppercase tracking-wider shadow-xl flex items-center gap-1.5 border-2 border-white whitespace-nowrap"
         >
-          <Star className="w-3.5 h-3.5 fill-current" />
-          {lang === 'es' ? '⭐ MÁS RECOMENDADO' : '⭐ MOST RECOMMENDED'}
+          <Star className="w-3 h-3 fill-current" />
+          {lang === 'es' ? 'MÁS RECOMENDADO' : 'MOST RECOMMENDED'}
         </motion.div>
       )}
 
@@ -293,46 +295,84 @@ const DashboardDemo = ({ onClose, lang }: { onClose: () => void; lang: Language 
   const [selectedPeriod, setSelectedPeriod] = useState('month');
   const [selectedSegment, setSelectedSegment] = useState('all');
 
-  const incomeTrendData = useMemo(() => [
-    { name: 'Ene', value: 24100, target: 20000 },
-    { name: 'Feb', value: 32200, target: 25000 },
-    { name: 'Mar', value: 42100, target: 30000 },
-    { name: 'Abr', value: 38800, target: 32000 },
-    { name: 'May', value: 51900, target: 35000 },
-    { name: 'Jun', value: 52600, target: 40000 },
-    { name: 'Jul', value: 63500, target: 45000 },
-    { name: 'Ago', value: 72300, target: 50000 },
-  ], []);
+  // Live tick to simulate real-time movement
+  const [tick, setTick] = useState(0);
+  useEffect(() => {
+    const id = setInterval(() => setTick((tk) => tk + 1), 2000);
+    return () => clearInterval(id);
+  }, []);
 
-  const trafficData = useMemo(() => [
-    { name: lang === 'es' ? 'Directo' : 'Direct', value: 42, color: '#3b82f6' },
-    { name: 'Social Media', value: 28, color: '#10b981' },
-    { name: 'Email', value: 18, color: '#8b5cf6' },
-    { name: 'Referral', value: 12, color: '#f59e0b' },
-  ], [lang]);
+  // Segment multiplier (Todos / Premium / Enterprise)
+  const segMul = selectedSegment === 'premium' ? 1.6 : selectedSegment === 'enterprise' ? 2.5 : 1;
 
-  const performanceData = useMemo(() => [
-    { name: 'Ene', sales: 25000, conversion: 3.2, roi: 245 },
-    { name: 'Feb', sales: 32000, conversion: 3.8, roi: 312 },
-    { name: 'Mar', sales: 42000, conversion: 4.1, roi: 389 },
-    { name: 'Abr', sales: 38500, conversion: 3.9, roi: 356 },
-    { name: 'May', sales: 51000, conversion: 4.5, roi: 478 },
-    { name: 'Jun', sales: 52500, conversion: 4.7, roi: 498 },
-    { name: 'Jul', sales: 63500, conversion: 5.2, roi: 589 },
-  ], []);
+  // X-axis labels per period
+  const labels = useMemo(() => {
+    if (selectedPeriod === 'week') return lang === 'es'
+      ? ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom']
+      : ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+    if (selectedPeriod === 'year') return ['Q1', 'Q2', 'Q3', 'Q4'];
+    return lang === 'es'
+      ? ['Sem 1', 'Sem 2', 'Sem 3', 'Sem 4']
+      : ['Wk 1', 'Wk 2', 'Wk 3', 'Wk 4'];
+  }, [selectedPeriod, lang]);
 
-  const kpiData = useMemo(() => [
-    { label: t.salesKpi, value: '$1.2M', change: '+23%', icon: DollarSign, color: 'emerald' },
-    { label: t.convKpi, value: '4.8%', change: '+1.2%', icon: TrendingUp, color: 'blue' },
-    { label: t.usersKpi, value: '45.2K', change: '+18%', icon: Users, color: 'purple' },
-    { label: t.npsKpi, value: '72', change: '+8', icon: Award, color: 'orange' },
-  ], [t]);
+  // Base shape per period
+  const baseShape = useMemo(() => {
+    if (selectedPeriod === 'week') return [24, 32, 28, 42, 38, 52, 63];
+    if (selectedPeriod === 'year') return [120, 185, 240, 310];
+    return [42, 55, 48, 72];
+  }, [selectedPeriod]);
+
+  // Animated income trend — jitter changes each tick
+  const incomeTrendData = useMemo(() => {
+    return labels.map((name, i) => {
+      const base = (baseShape[i] ?? 30) * 1000 * segMul;
+      const jitter = (Math.sin(tick + i) * 0.06 + (Math.random() - 0.5) * 0.05) * base;
+      const value = Math.max(0, Math.round(base + jitter));
+      return { name, value, target: Math.round(base * 0.8) };
+    });
+  }, [labels, baseShape, segMul, tick]);
+
+  // Animated performance (bar chart)
+  const performanceData = useMemo(() => {
+    return labels.map((name, i) => {
+      const base = (baseShape[i] ?? 30) * 1000 * segMul * 0.9;
+      const jitter = (Math.cos(tick * 0.8 + i) * 0.08) * base;
+      return { name, sales: Math.max(0, Math.round(base + jitter)) };
+    });
+  }, [labels, baseShape, segMul, tick]);
+
+  // Traffic distribution (donut) — small live shifts
+  const trafficData = useMemo(() => {
+    const j = Math.round(Math.sin(tick) * 3);
+    return [
+      { name: lang === 'es' ? 'Directo' : 'Direct', value: 42 + j, color: '#3b82f6' },
+      { name: 'Social Media', value: 28 - j, color: '#10b981' },
+      { name: 'Email', value: 18, color: '#8b5cf6' },
+      { name: 'Referral', value: 12, color: '#f59e0b' },
+    ];
+  }, [lang, tick]);
+
+  // KPIs react to segment + live tick
+  const kpiData = useMemo(() => {
+    const sales = (1.2 * segMul + Math.sin(tick) * 0.03).toFixed(2);
+    const conv = (4.8 + Math.sin(tick * 0.5) * 0.2).toFixed(1);
+    const users = (45.2 * segMul + Math.cos(tick) * 0.4).toFixed(1);
+    const nps = Math.round(72 + Math.sin(tick) * 2);
+    return [
+      { label: t.salesKpi, value: `$${sales}M`, change: '+23%', icon: DollarSign, color: 'emerald' },
+      { label: t.convKpi, value: `${conv}%`, change: '+1.2%', icon: TrendingUp, color: 'blue' },
+      { label: t.usersKpi, value: `${users}K`, change: '+18%', icon: Users, color: 'purple' },
+      { label: t.npsKpi, value: `${nps}`, change: '+8', icon: Award, color: 'orange' },
+    ];
+  }, [t, segMul, tick]);
 
   return (
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
+      onClick={onClose}
       className="fixed inset-0 z-[100] flex items-center justify-center p-2 md:p-4 bg-gray-950/90 backdrop-blur-md"
     >
       <motion.div
@@ -340,6 +380,7 @@ const DashboardDemo = ({ onClose, lang }: { onClose: () => void; lang: Language 
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.95, opacity: 0 }}
         transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+        onClick={(e) => e.stopPropagation()}
         className="bg-[#f8fafc] w-full max-w-7xl h-full max-h-[90vh] rounded-[32px] shadow-3xl overflow-hidden flex flex-col border border-white/10"
       >
         {/* Header */}
@@ -359,6 +400,17 @@ const DashboardDemo = ({ onClose, lang }: { onClose: () => void; lang: Language 
             <div>
               <h3 className="font-black text-gray-900 text-lg">{t.demoTitle}</h3>
               <p className="text-[9px] font-black text-blue-600 uppercase tracking-widest">{t.demoBack}</p>
+            </div>
+            {/* LIVE indicator */}
+            <div className="ml-4 hidden sm:flex items-center gap-2 px-3 py-1.5 bg-emerald-50 rounded-full border border-emerald-200">
+              <motion.span
+                animate={{ opacity: [1, 0.3, 1] }}
+                transition={{ duration: 1.5, repeat: Infinity }}
+                className="w-2 h-2 rounded-full bg-emerald-500"
+              />
+              <span className="text-[10px] font-black text-emerald-600 uppercase tracking-widest">
+                {lang === 'es' ? 'En Vivo' : 'Live'}
+              </span>
             </div>
           </div>
           <motion.button
@@ -480,7 +532,14 @@ const DashboardDemo = ({ onClose, lang }: { onClose: () => void; lang: Language 
               className="lg:col-span-2 bg-white p-8 rounded-3xl border border-gray-100 shadow-sm hover:shadow-lg transition-all"
             >
               <h4 className="font-black text-gray-900 mb-2">{t.salesTrend}</h4>
-              <p className="text-xs font-bold text-gray-400 mb-6">Últimos 8 meses</p>
+              <p className="text-xs font-bold text-gray-400 mb-6">
+                {selectedPeriod === 'week'
+                  ? (lang === 'es' ? 'Últimos 7 días' : 'Last 7 days')
+                  : selectedPeriod === 'year'
+                  ? (lang === 'es' ? 'Por trimestre' : 'By quarter')
+                  : (lang === 'es' ? 'Por semana' : 'By week')}
+                {selectedSegment !== 'all' && ` · ${selectedSegment === 'premium' ? 'Premium' : 'Enterprise'}`}
+              </p>
               <div className="h-64">
                 <ResponsiveContainer width="100%" height="100%">
                   <AreaChart data={incomeTrendData}>
@@ -626,6 +685,7 @@ export default function App() {
           { label: t.navWhy, href: '#why' },
           { label: t.navPricing, href: '#pricing' },
           { label: t.navUseCases, href: '#usecases' },
+          { label: t.navDemo, onClick: () => setShowDemo(true) },
         ]}
         onLanguageChange={(lang) => setLang(lang as Language)}
         currentLang={lang}
@@ -646,7 +706,7 @@ export default function App() {
           }}
           secondaryCTA={{
             label: t.liveDemo,
-            href: '#demo',
+            onClick: () => setShowDemo(true),
           }}
         />
       </section>
@@ -967,7 +1027,7 @@ export default function App() {
                 </li>
                 <li className="flex items-center gap-4 group">
                   <div className="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center group-hover:bg-emerald-600 transition-all">
-                    <MessageSquare className="w-5 h-5 text-emerald-500 group-hover:text-white" />
+                    <WhatsAppIcon className="w-5 h-5 text-emerald-500 group-hover:text-white" />
                   </div>
                   <a href={WHATSAPP_URL} target="_blank" className="hover:text-white transition-colors">WhatsApp</a>
                 </li>
@@ -994,7 +1054,9 @@ export default function App() {
       </footer>
 
       {/* Demo Modal */}
-      {showDemo && <DashboardDemo onClose={() => setShowDemo(false)} lang={lang} />}
+      <AnimatePresence>
+        {showDemo && <DashboardDemo onClose={() => setShowDemo(false)} lang={lang} />}
+      </AnimatePresence>
     </motion.div>
   );
 }
